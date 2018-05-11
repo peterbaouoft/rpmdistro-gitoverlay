@@ -49,7 +49,7 @@ MOCKCONFDIR = os.path.join(SYSCONFDIR, "mock")
 # This variable is global as it's set by `eval`ing the mock config file =(
 config_opts = {}
 
-SRPMBuild = collections.namedtuple('SRPMBuild', ['filename', 'rpmwith', 'rpmwithout'])
+SRPMBuild = collections.namedtuple('SRPMBuild', ['filename', 'rpmwith', 'rpmwithout', 'options'])
 
 def log(msg):
     print(msg)
@@ -237,6 +237,7 @@ class MockChain(object):
                                 '--spec', spec_fn,
                                 '--sources', pkgdir,
                                 '--resultdir', resdir_src,
+                                '--rpmbuild-opts', "--define 'make_redistributable 0'",
                                 '--no-cleanup-after')
             for n in os.listdir(resdir_src):
                 if n.endswith('.src.rpm'):
@@ -250,6 +251,7 @@ class MockChain(object):
         mockcmd.extend(['--nocheck',  # Tests should run after builds
                         '--old-chroot', # Since we'll be running in a container
                         '--resultdir', resdir,
+                        '--rpmbuild-opts', "--define 'make_redistributable 0'",
                         '--no-cleanup-after'])
         for rpmwith in pkg.rpmwith:
             mockcmd.append('--with=' + rpmwith)
@@ -272,7 +274,7 @@ class MockChain(object):
         _pkgs = []
         for pkg in pkgs:
             if not isinstance(pkg, SRPMBuild):
-                pkg = SRPMBuild(pkg, [], [])
+                pkg = SRPMBuild(pkg, [], [], [])
             _pkgs.append(pkg)
         pkgs = _pkgs
         for pkg in pkgs:
