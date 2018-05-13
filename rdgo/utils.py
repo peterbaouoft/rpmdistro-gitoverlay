@@ -33,6 +33,17 @@ def log(msg):
     sys.stdout.write('\n')
     sys.stdout.flush()
 
+def convert_key_pair_into_commands(key_value_pairs, command_name):
+    "This command is mainly used for rpmdbuild-opts, where you have
+    to wrap every options with only one single entry. (for passing into mockbuild)"
+    output_string_list = []
+    # Loop through the key_pair dictionary and extract them as commands
+    for key, value in key_value_pairs.items():
+        command = "--" + command_name + " " + '\"' + key + " " + value + '\"'
+        output_string_list.append(command)
+    output = " ".join(output_string_list)
+    return output
+
 def run_sync(args, **kwargs):
     """Wraps subprocess.check_call(), logging the command line too."""
     if isinstance(args, six.string_types):

@@ -1,7 +1,7 @@
 #pylint: skip-file
 
 import unittest
-from rdgo import mockchain
+from rdgo import utils
 
 no_mock = True
 try:
@@ -34,9 +34,12 @@ class TestRpmBuildOptions(unittest.TestCase):
     Unit tests for added build options related functions
     """
 
-    def test_test(self):
-        print("test")
+    def test_key_value_pair(self):
+        key_value_pairs = {"foo" : "bar",
+                           "baz" : "blar"}
 
+        output = utils.convert_key_pair_into_commands(key_value_pairs, "define")
+        self.assertEqual(output, '--define "foo bar" --define "baz blar"')
 
 if __name__ == '__main__':
     unittest.main()
