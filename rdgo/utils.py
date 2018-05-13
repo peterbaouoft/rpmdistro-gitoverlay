@@ -34,8 +34,10 @@ def log(msg):
     sys.stdout.flush()
 
 def convert_key_pair_into_commands(key_value_pairs, command_name):
-    "This command is mainly used for rpmdbuild-opts, where you have
-    to wrap every options with only one single entry. (for passing into mockbuild)"
+    """
+    This command is mainly used for rpmdbuild-opts, where you have
+    to wrap every options with only one single entry. (for passing into mockbuild)
+    """
     output_string_list = []
     # Loop through the key_pair dictionary and extract them as commands
     for key, value in key_value_pairs.items():

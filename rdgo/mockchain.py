@@ -49,7 +49,7 @@ MOCKCONFDIR = os.path.join(SYSCONFDIR, "mock")
 # This variable is global as it's set by `eval`ing the mock config file =(
 config_opts = {}
 
-SRPMBuild = collections.namedtuple('SRPMBuild', ['filename', 'rpmwith', 'rpmwithout'])
+SRPMBuild = collections.namedtuple('SRPMBuild', ['filename', 'rpmwith', 'rpmwithout', 'rpmbuildopts'])
 
 def log(msg):
     print(msg)
@@ -251,6 +251,11 @@ class MockChain(object):
                         '--old-chroot', # Since we'll be running in a container
                         '--resultdir', resdir,
                         '--no-cleanup-after'])
+
+        if pkg.rpmbuildopts:
+            # Collect all rpmbuildopts and join them into one string
+            buildopts = " ".join(pkg.rpmbuildopts)
+            mockcmd.append('--rpmbuild-opts=' + pkg.rpmbuildopts)
         for rpmwith in pkg.rpmwith:
             mockcmd.append('--with=' + rpmwith)
         for rpmwithout in pkg.rpmwithout:
